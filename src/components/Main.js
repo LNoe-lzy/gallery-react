@@ -34,6 +34,25 @@ let get30DegRandom = () => {
 };
 
 class ImgFigure extends React.Component {
+  constructor (props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  /*
+   * imgsFigue的点击处理函数
+   */
+  handleClick (e) {
+    //翻转和居中图片
+    if (this.props.arrange.isCenter) {
+      this.props.inverse()
+    } else {
+      this.props.center();
+    }
+    e.stopPropagation();
+    e.preventDefault();
+  }
+
   render() {
     let styleObj = {};
 
@@ -49,8 +68,15 @@ class ImgFigure extends React.Component {
       });
     }
 
+    if (this.props.arrange.isCenter) {
+      styleObj.zIndex = 11;
+    }
+
+    let imgFigureClassName = 'img-figure';
+    imgFigureClassName += this.props.arrange.isInverse ? ' is-inverse ' : '';
+
     return (
-      <figure className="img-figure" style={styleObj}>
+      <figure className={imgFigureClassName} style={styleObj} onClick={this.handleClick}>
         <img src={this.props.data.imageUrl}
              alt={this.props.data.title}
         />
@@ -58,6 +84,11 @@ class ImgFigure extends React.Component {
           <h2 className="img-title">
             {this.props.data.title}
           </h2>
+          <div className="img-back" onClick={this.handleClick} >
+            <p>
+              {this.props.data.title}
+            </p>
+          </div>
         </figcaption>
       </figure>
     );
@@ -92,10 +123,24 @@ class AppComponent extends React.Component {
           //   top: '0'
           // },
           // rotate: 0
-
-
+          // isInverse: false
+          // isCenter: false
         }
       ]
+    }
+  }
+
+  /*
+   * 翻转图片
+   * @params index输入当前被执行inverse操作的图片对应的图片信息数组的index值
+   */
+  inverse (index) {
+    return () => {
+      let imgsArrangArr = this.state.imgsArrangeArr;
+      imgsArrangArr[index].isInverse = !imgsArrangArr[index].isInverse;
+      this.setState({
+        imgsArrangeArr: imgsArrangArr
+      });
     }
   }
 
@@ -121,8 +166,12 @@ class AppComponent extends React.Component {
 
       imgsArrangeCenterArr = imgsArrangeArr.splice(centerIndex, 1);
 
-    // 首先剧中 centerIndex 的图片
-    imgsArrangeCenterArr[0].pos = centerPos;
+    //首先居中centerIndex图片 ,centerIndex图片不需要旋转
+    imgsArrangeCenterArr[0] = {
+      pos: centerPos,
+      rotate: 0,
+      isCenter: true
+    };
 
     imgsArrangeCenterArr[0].rotate = 0;
 
@@ -137,7 +186,8 @@ class AppComponent extends React.Component {
           top: getRangeRandom(vPosRangeTopY[0], vPosRangeTopY[1]),
           left: getRangeRandom(vPosRangeX[0], vPosRangeX[1])
         },
-        rotate: get30DegRandom()
+        rotate: get30DegRandom(),
+        isCenter: false
       };
     });
 
@@ -156,7 +206,8 @@ class AppComponent extends React.Component {
           top: getRangeRandom(hPosRangeY[0], hPosRangeY[1]),
           left: getRangeRandom(hPosRangeLORX[0], hPosRangeLORX[1])
         },
-        rotate: get30DegRandom()
+        rotate: get30DegRandom(),
+        isCenter: false
       };
     }
 
@@ -168,6 +219,12 @@ class AppComponent extends React.Component {
     this.setState({
       imgsArrangeArr: imgsArrangeArr
     });
+  }
+
+  center (index) {
+    return () => {
+      this.rearrange(index);
+    }
   }
 
   // 组建加载以后为每张图片计算其位置范围
@@ -221,10 +278,12 @@ class AppComponent extends React.Component {
             left: 0,
             top: 0
           },
-          rotate: 0
+          rotate: 0,
+          isInverse: false,
+          isCenter: false
         }
       }
-      imgFigures.push(<ImgFigure data={value} key={index} ref={'imgFigure' + index} arrange={this.state.imgsArrangeArr[index]} />);
+      imgFigures.push(<ImgFigure data={value} key={index} ref={'imgFigure' + index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)} />);
     });
 
     return (
