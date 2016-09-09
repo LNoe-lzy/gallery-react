@@ -95,6 +95,25 @@ class ImgFigure extends React.Component {
   }
 }
 
+// 控制组件
+class ControllerUnit extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  render () {
+    return (
+      <span className="controller-unit" onClick={this.handleClick}>
+
+      </span>
+    );
+  }
+}
+
 class AppComponent extends React.Component {
   constructor (props) {
     super(props);
@@ -284,6 +303,9 @@ class AppComponent extends React.Component {
         }
       }
       imgFigures.push(<ImgFigure data={value} key={index} ref={'imgFigure' + index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)} />);
+
+      controllerUnits.push(<ControllerUnit key={index} />)
+
     });
 
     return (
