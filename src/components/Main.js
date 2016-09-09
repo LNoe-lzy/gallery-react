@@ -28,8 +28,7 @@ let getRangeRandom = (low, high) => Math.ceil(Math.random() * (high - low) + low
  * 获取0～30度之间的一个任意正负值
  */
 let get30DegRandom = () => {
-  let deg = '';
-  deg = (Math.random() > 0.5) ? '+' : '-';
+  let deg = (Math.random() > 0.5) ? '+' : '-';
   return deg + Math.ceil(Math.random() * 30);
 };
 
@@ -199,7 +198,7 @@ class AppComponent extends React.Component {
 
       imgsArrangTopArr = [],
       topImgNum = Math.floor(Math.random() * 2), //取一个或者不取
-      topImgSpiceIndex = 0,
+      topImgSpiceIndex,
 
       imgsArrangeCenterArr = imgsArrangeArr.splice(centerIndex, 1);
 
