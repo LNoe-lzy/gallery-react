@@ -1,4 +1,6 @@
 # gallery-react
-基于react ES6的图片画廊。     
-npm install   
-node server.js 
+百度外卖飞飞飞
+
+# 使用
+- npm install   
+- npm start
