@@ -43,6 +43,7 @@ html, body {
       transform-style: preserve-3d;
       transition: transform .6s ease-in-out, left .6s ease-in-out, top .6s ease-in-out;
       transform-origin: 0 50% 0;
+      box-shadow: 0 0 2px #dedede;
       &.is-inverse {
         transform: translate(320px) rotateY(180deg);
       }
@@ -59,8 +60,8 @@ html, body {
       color: #666;
       transform: rotateY(180deg) translateZ(1px);
       backface-visibility:hidden;
-
       background: #fff;
+      font-size: 24px;
     }
     figcaption {
       text-align: center;
@@ -73,6 +74,31 @@ html, body {
     }
   }
 }
+// handler
+.handler {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  margin-left: -15px;
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  background-color: #aaa;
+  border-radius: 50%;
+  transform: scale(1.5);
+  transition: transform .6s ease-in-out, background-color .3s;
+  &::after {
+    color: #ffffff;
+    font-family: "icons-turn-arrow";
+    line-height: 30px;
+    content: "\e600";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
 // controller
 .controller-nav {
   position: absolute;
@@ -81,7 +107,7 @@ html, body {
   z-index: 101;
   width: 100%;
   text-align: center;
-
+  display: none;
   @at-root {
     .controller-unit {
       display: inline-block;

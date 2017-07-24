@@ -36,6 +36,19 @@ class ImgFigure extends React.Component {
   constructor (props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
+    this.state = {
+      start: '',
+      end: ''
+    };
+  }
+
+  componentDidMount() {
+    let start = this.generateChar();
+    let end = this.generateChar();
+    this.setState({
+      start,
+      end
+    });
   }
 
   /*
@@ -50,6 +63,16 @@ class ImgFigure extends React.Component {
     }
     e.stopPropagation();
     e.preventDefault();
+  }
+
+  random(max, min) {
+    let range = max - min;
+    let rand = Math.random();
+    return(min + Math.round(rand * range));
+  }
+
+  generateChar() {
+    return String.fromCharCode(this.random(122, 97));
   }
 
   render() {
@@ -85,8 +108,13 @@ class ImgFigure extends React.Component {
           </h2>
           <div className="img-back" onClick={this.handleClick} >
             <p>
-              {this.props.data.title}
+              开始字母
             </p>
+            <p>{this.state.start}</p>
+            <p>
+              结束字母
+            </p>
+            <p>{this.state.end}</p>
           </div>
         </figcaption>
       </figure>
@@ -162,8 +190,10 @@ class AppComponent extends React.Component {
           // isInverse: false
           // isCenter: false
         }
-      ]
+      ],
+      index: 0
     }
+    this.handleClick = this.handleClick.bind(this);
   }
 
   /*
@@ -303,6 +333,21 @@ class AppComponent extends React.Component {
 
   }
 
+  handleClick (e) {
+    let index = this.state.index;
+    let len = imageData.length;
+    index++;
+    if (index >= len) {
+      index = 0;
+    }
+    let controller = this.refs['controller' + index];
+    controller.handleClick(e);
+    controller.handleClick(e);
+    this.setState({
+      index
+    });
+  }
+
   render() {
 
     let controllerUnits = [],
@@ -321,7 +366,7 @@ class AppComponent extends React.Component {
       }
       imgFigures.push(<ImgFigure data={value} key={index} ref={'imgFigure' + index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)} />);
 
-      controllerUnits.push(<ControllerUnit key={index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)} />)
+      controllerUnits.push(<ControllerUnit key={index} ref={'controller' + index} arrange={this.state.imgsArrangeArr[index]} inverse={this.inverse(index)} center={this.center(index)} />)
 
     });
 
@@ -330,7 +375,8 @@ class AppComponent extends React.Component {
         <section className="img-sec">
           {imgFigures}
         </section>
-        <nav className="controller-nav">
+        <span onClick={this.handleClick} className="is-center handler"></span>
+         <nav className="controller-nav">
           {controllerUnits}
         </nav>
       </section>
