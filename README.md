@@ -1,5 +1,5 @@
-# gallery-react
-翻滚吧小熊
+
+# 翻滚吧小熊
 
 # 使用
 - npm install   
